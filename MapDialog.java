@@ -26,13 +26,12 @@
      
       public MapDialog() throws Exception {
      
-        // Valmistele ikkuna ja lis�� siihen komponentit
+        // Valmistele ikkuna ja lisaa siihen komponentit
      
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
      
-        // ALLA OLEVAN TESTIRIVIN VOI KORVATA JOLLAKIN MUULLA ERI ALOITUSN�KYM�N
-        // LATAAVALLA RIVILL�
+        // TESTIRIVI
         imageLabel.setIcon(new ImageIcon(new URL("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,cities&STYLES=&FORMAT=image/png&TRANSPARENT=true")));
      
         add(imageLabel, BorderLayout.EAST);
@@ -51,7 +50,7 @@
         leftPanel.setMaximumSize(new Dimension(100, 600));
      
         // TODO:
-        // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LIS�� K�YTT�LIITTYM��N
+        // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LISAA KAYTTOLIITTYMAAN
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
         leftPanel.add(new LayerCheckBox("bluemarble", "Maapallo", true));
         leftPanel.add(new LayerCheckBox("cities", "Kaupungit", false));
@@ -77,7 +76,7 @@
       }
      
       // Kontrollinappien kuuntelija
-      // KAIKKIEN NAPPIEN YHTEYDESS� VOINEE HY�DYNT�� updateImage()-METODIA
+      // KAIKKIEN NAPPIEN YHTEYDESSA VOINEE HODYNTAA updateImage()-METODIA
       private class ButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
           if(e.getSource() == refreshB) {
@@ -86,32 +85,32 @@
           if(e.getSource() == leftB) {
             // TODO:
             // VASEMMALLE SIIRTYMINEN KARTALLA
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
           if(e.getSource() == rightB) {
             // TODO:
             // OIKEALLE SIIRTYMINEN KARTALLA
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
           if(e.getSource() == upB) {
             // TODO:
-            // YL�SP�IN SIIRTYMINEN KARTALLA
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // YLOSPAIN SIIRTYMINEN KARTALLA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
           if(e.getSource() == downB) {
             // TODO:
-            // ALASP�IN SIIRTYMINEN KARTALLA
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // ALASPAIN SIIRTYMINEN KARTALLA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
           if(e.getSource() == zoomInB) {
             // TODO:
             // ZOOM IN -TOIMINTO
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
           if(e.getSource() == zoomOutB) {
             // TODO:
             // ZOOM OUT -TOIMINTO
-            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA P�IVIT� KUVA
+            // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
           }
         }
       }
@@ -126,14 +125,14 @@
         public String getName() { return name; }
       }
      
-      // Tarkastetaan mitk� karttakerrokset on valittu,
-      // tehd��n uudesta karttakuvasta pyynt� palvelimelle ja p�ivitet��n kuva
+      // Tarkastetaan mitka karttakerrokset on valittu,
+      // tehdaan uudesta karttakuvasta pyynto palvelimelle ja paivitetaan kuva
       public void updateImage() throws Exception {
         String s = "";
      
-        // Tutkitaan, mitk� valintalaatikot on valittu, ja
+        // Tutkitaan, mitka valintalaatikot on valittu, ja
         // ker�t��n s:��n pilkulla erotettu lista valittujen kerrosten
-        // nimist� (k�ytet��n haettaessa uutta kuvaa)
+        // nimista (kaytetaan haettaessa uutta kuvaa)
         Component[] components = leftPanel.getComponents();
         for(Component com:components) {
             if(com instanceof LayerCheckBox)
@@ -142,7 +141,7 @@
         if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
      
         // TODO:
-        // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN P�IVITYS ERILLISESS� S�IKEESS�
+        // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN PAIVITYS ERILLISESSA SAIKEESSA
         // imageLabel.setIcon(new ImageIcon(url));
       }
      

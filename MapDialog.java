@@ -12,6 +12,11 @@
     public class MapDialog extends JFrame {
      
       // Kayttoliittyman komponentit
+      //Koordinaatit  
+      private int xmin;
+      private int ymin;
+      private int ymax;
+      private int xmax;
      
       private JLabel imageLabel = new JLabel();
       private JPanel leftPanel = new JPanel();

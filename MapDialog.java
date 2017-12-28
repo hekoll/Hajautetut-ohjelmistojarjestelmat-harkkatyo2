@@ -12,11 +12,13 @@
     public class MapDialog extends JFrame {
      
       // Kayttoliittyman komponentit
-      //Koordinaatit  
+      //Koordinaatit ja zoom/move muuttuja
       private int xmin;
       private int ymin;
       private int ymax;
       private int xmax;
+      private final int zoom=20;
+      private final int move=20;
      
       private JLabel imageLabel = new JLabel();
       private JPanel leftPanel = new JPanel();
@@ -91,31 +93,47 @@
             // TODO:
             // VASEMMALLE SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin-move;
+            xmax=xmax-move;
           }
           if(e.getSource() == rightB) {
             // TODO:
             // OIKEALLE SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin+move;
+            xmax=xmax+move;
           }
           if(e.getSource() == upB) {
             // TODO:
             // YLOSPAIN SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            ymin=ymin+move;
+            ymax=ymax+move;
           }
           if(e.getSource() == downB) {
             // TODO:
             // ALASPAIN SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            ymin=ymin-move;
+            ymax=ymax-move;
           }
           if(e.getSource() == zoomInB) {
             // TODO:
             // ZOOM IN -TOIMINTO
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin+zoom;
+            xmax=xmax-zoom;
+            ymin=ymin+zoom;
+            ymax=ymax-zoom;
           }
           if(e.getSource() == zoomOutB) {
             // TODO:
             // ZOOM OUT -TOIMINTO
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin-zoom;
+            xmax=xmax+zoom;
+            ymin=ymin-zoom;
+            ymax=ymax+zoom;
           }
         }
       }

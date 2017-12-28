@@ -1,45 +1,63 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+**Hajautetut ohjelmistojärjestelmät ja pilvipalvelut 2017 HARJOITUSTYÖ2
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+**KARTANKATSELUOHJELMA Tehtävänanto:
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+Työn tarkoituksena on demonstroida pavelupyyntöjen lähettämistä palvelimelle verkon yli. 
 
----
+Tehtävänä on tehdä sovellus, jolla voi katsella WMS-palvelusta haettuja karttakuvia. WMS (Web
+Map Service) on geografisten karttakuvien esittämiseen tarkoitettu standardiprotokolla. Palvelin
+generoi tietokantansa perusteella asiakkaan antamia parametreja vastaavan karttakuvan.
+WMS:ssä on kaksi pääasiallista kyselyä: getCapabilities-kysely ja getMap-kysely. Vastauksena
+ensin mainittuun kyselyyn palvelin palauttaa XML-muodossa tietoja karttapalvelun tarjoamista
+kerroksista, mm. palvelun tukemat koordinaatistot, karttakerrosten nimet ja niiden
+reunakoordinaatit. getMap-kysely puolestaan hakee palvelimelta annettujen parametrien perusteella
+karttakuvan, joka on normaali kuvatiedosto, esim. PNG tai JPG.
 
-## Edit a file
+Seuraavassa on esimerkki getCapabilities-kyselystä:
+http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1
+&REQUEST=GetCapabilities
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+Vastaavasti getMap-kyselyn muoto on seuraava:
+http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1
+&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326
+&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities
+&STYLES=&FORMAT=image/png&TRANSPARENT=true
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+Tässä kyselyssä parametreina ovat palvelun ilmaiseva vakioparametri WMS, WMS-versio, kyselyn
+tyyppi, näytettävän alueen rajat (xmin, ymin, xmax, ymax), käytettävä koordinaatisto (tässä
+harjoitustyössä käytetään EPSG:4326 eli WGS84-koordinaatistoa), karttakuvan leveys ja korkeus
+kuvapisteinä, näytettävät kerrokset (useat kerrokset erotetaan toisistaan pilkulla), kartan piirtotyyliin
+liittyvä parametri (jätetään tyhjäksi tässä työssä), kuvaformaatti (tässä png) ja taustan läpinäkyvyys
+totuusarvona. Sekä getCapabilities- että getMap-kyselyä voi kokeilla normaalilla Internetselaimella.
 
----
+Harjoitustyössä tehtävän sovelluksen tulisi toimia seuraavasti:
 
-## Create a file
-
-Next, you’ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+• Haetaan aluksi XML-muotoiset tiedot WMS-karttapalvelussa tarjotuista karttakerroksista
+edellisessä esimerkissä esitetyllä getCapabilities-kyselyllä.
+• Poimitaan palvelimen palauttamasta XML-datasta tiedot kaikkien karttakerrosten (layerstagien
+sisällä) getMap-kyselyissä käytettävistä nimistä (name-tagit) sekä sovelluksessa
+käyttäjille näkyvistä nimistä (title-tagit). XML-datassa siis on esimerkiksi continentsniminen
+kerros, jonka käyttäjälle näkyvä nimi on World continents. XML-datan
+jäsentämiseen tulee käyttää Javan valmiita kirjastoja (esim. paketit javax.xml.parsers ja
+org.xml.sax).
+• Sovellukselle on valmiiksi toteutettu käyttöliittymän runko (saatavissa kurssin Moodle-
+sivulta), jossa on paikka näytettävälle karttakuvalle. Aloitusnäkymäksi tähän voi ladata
+getMap-kyselyllä vapaavalintaiset karttakerrokset ja vapaavalintaisen kohdan kartalta. Tässä
+voi haluttaessa käyttää myös XML-datassa olevia rajakoordinaatteja. Käyttöliittymän
+koodissa on valmiina esimerkki aloitusnäkymän lataamisesta.
+• Käyttöliittymään tulee valintalaatikot (checkbox) kutakin karttakerrosta kohti. Painettaessa
+Päivitä-nappia sovellus pyytää palvelimelta uuden karttakuvan, jossa on rastitettujen
+valintalaatikoiden mukaiset kerrokset. Kuvan hakeminen palvelimelta on syytä tehdä
+omassa säikeessään.
+• Lisäksi toteutetaan käyttöliittymään kartalla liikkuminen (oikealle, vasemmalle, ylös ja alas)
+sekä kartan lähennys ja loitonnus. Painettaessa liikkumisnuolia tai zoomauspainikkeita
+muutetaan siis kartan koordinaatteja vastaavasti ja tehdään pavelimelle uusi getMap-pyyntö.
+Liikkumisen ja zoomauksen siirtymät saa päättää vapaasti. Jälleen karttakuvan lataus
+tehdään omassa säikeessään.
+• Käyttöliittymän runko on tehty valmiiksi helpottamaan sovelluksen rakentamista, mutta sitä
+saa myös halutessaan vapaasti muokata (ja parannella esteettisesti ja toiminnallisesti).
+Käyttöliittymäluokan koodissa on merkattu TODO-kommenteilla kohtia, joita työhön tulee
+toteuttaa.
+• Muun muassa se, miten ja mihin getMap-pyynnöissä tarvittavat parametrit sovelluksessa
+säilötään ja miten niitä muutetaan ennen uuden karttakuvan hakemista, ovat ratkaistavia
+ongelmia. Myös työn luokkarakennetta on hyvä miettiä; luokkia saa tarpeen mukaan lisäillä.

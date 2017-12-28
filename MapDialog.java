@@ -23,7 +23,7 @@
       private JLabel imageLabel = new JLabel();
       private JPanel leftPanel = new JPanel();
      
-      private JButton refreshB = new JButton("P�ivit�");
+      private JButton refreshB = new JButton("Paivita");
       private JButton leftB = new JButton("<");
       private JButton rightB = new JButton(">");
       private JButton upB = new JButton("^");
@@ -134,6 +134,7 @@
             xmax=xmax+zoom;
             ymin=ymin-zoom;
             ymax=ymax+zoom;
+            
           }
         }
       }
@@ -154,7 +155,7 @@
         String s = "";
      
         // Tutkitaan, mitka valintalaatikot on valittu, ja
-        // ker�t��n s:��n pilkulla erotettu lista valittujen kerrosten
+        // kerataan s:aan pilkulla erotettu lista valittujen kerrosten
         // nimista (kaytetaan haettaessa uutta kuvaa)
         Component[] components = leftPanel.getComponents();
         for(Component com:components) {
@@ -166,6 +167,18 @@
         // TODO:
         // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN PAIVITYS ERILLISESSA SAIKEESSA
         // imageLabel.setIcon(new ImageIcon(url));
+        
+        static class KartanPaivitys implements Runnable{
+            
+            KartanPaivitys(){
+                
+            } // konstruktori
+            
+            @Override
+            public void run(){
+                
+            } // run
+        } // KartanPaivitys
       }
      
     } // MapDialog

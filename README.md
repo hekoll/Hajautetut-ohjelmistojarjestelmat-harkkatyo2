@@ -34,30 +34,36 @@ Harjoitustyössä tehtävän sovelluksen tulisi toimia seuraavasti:
 
 • Haetaan aluksi XML-muotoiset tiedot WMS-karttapalvelussa tarjotuista karttakerroksista
 edellisessä esimerkissä esitetyllä getCapabilities-kyselyllä.
+
 • Poimitaan palvelimen palauttamasta XML-datasta tiedot kaikkien karttakerrosten (layerstagien
 sisällä) getMap-kyselyissä käytettävistä nimistä (name-tagit) sekä sovelluksessa
 käyttäjille näkyvistä nimistä (title-tagit). XML-datassa siis on esimerkiksi continentsniminen
 kerros, jonka käyttäjälle näkyvä nimi on World continents. XML-datan
 jäsentämiseen tulee käyttää Javan valmiita kirjastoja (esim. paketit javax.xml.parsers ja
 org.xml.sax).
+
 • Sovellukselle on valmiiksi toteutettu käyttöliittymän runko (saatavissa kurssin Moodle-
 sivulta), jossa on paikka näytettävälle karttakuvalle. Aloitusnäkymäksi tähän voi ladata
 getMap-kyselyllä vapaavalintaiset karttakerrokset ja vapaavalintaisen kohdan kartalta. Tässä
 voi haluttaessa käyttää myös XML-datassa olevia rajakoordinaatteja. Käyttöliittymän
 koodissa on valmiina esimerkki aloitusnäkymän lataamisesta.
+
 • Käyttöliittymään tulee valintalaatikot (checkbox) kutakin karttakerrosta kohti. Painettaessa
 Päivitä-nappia sovellus pyytää palvelimelta uuden karttakuvan, jossa on rastitettujen
 valintalaatikoiden mukaiset kerrokset. Kuvan hakeminen palvelimelta on syytä tehdä
 omassa säikeessään.
+
 • Lisäksi toteutetaan käyttöliittymään kartalla liikkuminen (oikealle, vasemmalle, ylös ja alas)
 sekä kartan lähennys ja loitonnus. Painettaessa liikkumisnuolia tai zoomauspainikkeita
 muutetaan siis kartan koordinaatteja vastaavasti ja tehdään pavelimelle uusi getMap-pyyntö.
 Liikkumisen ja zoomauksen siirtymät saa päättää vapaasti. Jälleen karttakuvan lataus
 tehdään omassa säikeessään.
+
 • Käyttöliittymän runko on tehty valmiiksi helpottamaan sovelluksen rakentamista, mutta sitä
 saa myös halutessaan vapaasti muokata (ja parannella esteettisesti ja toiminnallisesti).
 Käyttöliittymäluokan koodissa on merkattu TODO-kommenteilla kohtia, joita työhön tulee
 toteuttaa.
+
 • Muun muassa se, miten ja mihin getMap-pyynnöissä tarvittavat parametrit sovelluksessa
 säilötään ja miten niitä muutetaan ennen uuden karttakuvan hakemista, ovat ratkaistavia
 ongelmia. Myös työn luokkarakennetta on hyvä miettiä; luokkia saa tarpeen mukaan lisäillä.

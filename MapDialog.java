@@ -8,6 +8,11 @@
     import java.awt.*;
     import java.awt.event.*;
     import java.net.*;
+    //Prsimis paketteja
+    import org.apache.xerces.parsers.DOMParser;
+    import org.w3c.dom.Document;
+    import org.xml.sax.SAXException;
+    import java.io.IOException;
      
     public class MapDialog extends JFrame {
      
@@ -59,6 +64,21 @@
         // TODO:
         // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LISAA KAYTTOLIITTYMAAN
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
+        
+        //Parsimis koodia
+        for(){
+            string xmlFile = getCapabilities();
+            DOMParser parser = new DOMpParser();
+            try{parser.parse(xmlFile);}
+                catch(SAXException se){
+                        se.printStackTrace();
+                        }
+                catch(IOException ioe){
+                        ioe.printStackTrace();
+                        }
+            Document document = parser.getDocument();
+        }
+        
         leftPanel.add(new LayerCheckBox("bluemarble", "Maapallo", true));
         leftPanel.add(new LayerCheckBox("cities", "Kaupungit", false));
      

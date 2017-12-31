@@ -38,8 +38,6 @@
      
       public MapDialog() throws Exception {
      
-        // Valmistele ikkuna ja lisaa siihen komponentit
-     
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
      
@@ -66,18 +64,17 @@
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
         
         //Parsimis koodia
+        DocumentBuilderFactory docMuodostus = DocumentBuilderFactory.newInstance();
+        DocumentBuilder muodostaja;
+        Dodument tieto = null;
+        try{
+        muodostaja = docMuodostus.newDocumentBuilder();
+        tieto = muodostaja.parse("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities");
+        XPathFactory =
+        } // try
         for(){
-            string xmlFile = getCapabilities();
-            DOMParser parser = new DOMpParser();
-            try{parser.parse(xmlFile);}
-                catch(SAXException se){
-                        se.printStackTrace();
-                        }
-                catch(IOException ioe){
-                        ioe.printStackTrace();
-                        }
-            Document document = parser.getDocument();
-        }
+           
+        } // for
         
         leftPanel.add(new LayerCheckBox("bluemarble", "Maapallo", true));
         leftPanel.add(new LayerCheckBox("cities", "Kaupungit", false));

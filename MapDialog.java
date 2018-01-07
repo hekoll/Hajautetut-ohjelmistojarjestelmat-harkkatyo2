@@ -8,10 +8,20 @@
     import java.awt.*;
     import java.awt.event.*;
     import java.net.*;
-    //Prsimis paketteja
-    import org.apache.xerces.parsers.DOMParser;
+    
+    //Parsimis paketteja
     import org.w3c.dom.Document;
     import org.xml.sax.SAXException;
+    import org.w3c.dom.NodeList;
+    import javax.xml.parsers.DocumentBuilder;
+    import javax.xml.parsers.DocumentBuilderFactory;
+    import javax.xml.parsers.ParserConfigurationException;
+    import javax.xml.xpath.XPath;
+    import javax.xml.xpath.XPathConstants;
+    import javax.xml.xpath.XPathExpression;
+    import javax.xml.xpath.XPathExpressionException;
+    import javax.xml.xpath.XPathFactory;
+
     import java.io.IOException;
      
     public class MapDialog extends JFrame {

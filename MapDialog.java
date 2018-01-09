@@ -8,15 +8,37 @@
     import java.awt.*;
     import java.awt.event.*;
     import java.net.*;
+    
+    //Parsimis paketteja
+    import org.w3c.dom.Document;
+    import org.xml.sax.SAXException;
+    import org.w3c.dom.NodeList;
+    import javax.xml.parsers.DocumentBuilder;
+    import javax.xml.parsers.DocumentBuilderFactory;
+    import javax.xml.parsers.ParserConfigurationException;
+    import javax.xml.xpath.XPath;
+    import javax.xml.xpath.XPathConstants;
+    import javax.xml.xpath.XPathExpression;
+    import javax.xml.xpath.XPathExpressionException;
+    import javax.xml.xpath.XPathFactory;
+
+    import java.io.IOException;
      
     public class MapDialog extends JFrame {
      
       // Kayttoliittyman komponentit
+      //Koordinaatit ja zoom/move muuttuja
+      private int xmin;
+      private int ymin;
+      private int ymax;
+      private int xmax;
+      private final int zoom=20;
+      private final int move=20;
      
       private JLabel imageLabel = new JLabel();
       private JPanel leftPanel = new JPanel();
      
-      private JButton refreshB = new JButton("P�ivit�");
+      private JButton refreshB = new JButton("Paivita");
       private JButton leftB = new JButton("<");
       private JButton rightB = new JButton(">");
       private JButton upB = new JButton("^");
@@ -25,8 +47,6 @@
       private JButton zoomOutB = new JButton("-");
      
       public MapDialog() throws Exception {
-     
-        // Valmistele ikkuna ja lisaa siihen komponentit
      
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -52,6 +72,20 @@
         // TODO:
         // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LISAA KAYTTOLIITTYMAAN
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
+        
+        //Parsimis koodia KESKEN!!! https://www.journaldev.com/1194/java-xpath-example-tutorial
+        DocumentBuilderFactory docMuodostus = DocumentBuilderFactory.newInstance();
+        DocumentBuilder muodostaja;
+        Dodument tieto = null;
+        try{
+        muodostaja = docMuodostus.newDocumentBuilder();
+        tieto = muodostaja.parse("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities");
+        XPathFactory =
+        } // try
+        for(){
+           
+        } // for
+        
         leftPanel.add(new LayerCheckBox("bluemarble", "Maapallo", true));
         leftPanel.add(new LayerCheckBox("cities", "Kaupungit", false));
      
@@ -86,31 +120,48 @@
             // TODO:
             // VASEMMALLE SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin-move;
+            xmax=xmax-move;
           }
           if(e.getSource() == rightB) {
             // TODO:
             // OIKEALLE SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin+move;
+            xmax=xmax+move;
           }
           if(e.getSource() == upB) {
             // TODO:
             // YLOSPAIN SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            ymin=ymin+move;
+            ymax=ymax+move;
           }
           if(e.getSource() == downB) {
             // TODO:
             // ALASPAIN SIIRTYMINEN KARTALLA
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            ymin=ymin-move;
+            ymax=ymax-move;
           }
           if(e.getSource() == zoomInB) {
             // TODO:
             // ZOOM IN -TOIMINTO
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin+zoom;
+            xmax=xmax-zoom;
+            ymin=ymin+zoom;
+            ymax=ymax-zoom;
           }
           if(e.getSource() == zoomOutB) {
             // TODO:
             // ZOOM OUT -TOIMINTO
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
+            xmin=xmin-zoom;
+            xmax=xmax+zoom;
+            ymin=ymin-zoom;
+            ymax=ymax+zoom;
+            
           }
         }
       }
@@ -131,7 +182,7 @@
         String s = "";
      
         // Tutkitaan, mitka valintalaatikot on valittu, ja
-        // ker�t��n s:��n pilkulla erotettu lista valittujen kerrosten
+        // kerataan s:aan pilkulla erotettu lista valittujen kerrosten
         // nimista (kaytetaan haettaessa uutta kuvaa)
         Component[] components = leftPanel.getComponents();
         for(Component com:components) {
@@ -140,9 +191,25 @@
         }
         if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
      
+      }
+      
         // TODO:
         // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN PAIVITYS ERILLISESSA SAIKEESSA
         // imageLabel.setIcon(new ImageIcon(url));
-      }
-     
+      
+        static class KartanPaivitys implements Runnable{
+            
+            KartanPaivitys(xmin, xmax, ymin, ymax){
+                
+            } // konstruktori
+            
+            @Override
+            public void run(){
+            imageLabel.setIcon(new ImageIcon("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1\n" +
+                                             "&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326\n" +
+                                             "&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities\n" +
+                                             "&STYLES=&FORMAT=image/png&TRANSPARENT=true"));     
+                
+            } // run
+        } // KartanPaivitys
     } // MapDialog

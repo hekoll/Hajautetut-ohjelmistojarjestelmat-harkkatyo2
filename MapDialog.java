@@ -73,7 +73,7 @@
         // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LISAA KAYTTOLIITTYMAAN
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
         
-        //Parsimis koodia
+        //Parsimis koodia KESKEN!!! https://www.journaldev.com/1194/java-xpath-example-tutorial
         DocumentBuilderFactory docMuodostus = DocumentBuilderFactory.newInstance();
         DocumentBuilder muodostaja;
         Dodument tieto = null;
@@ -191,21 +191,25 @@
         }
         if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
      
+      }
+      
         // TODO:
         // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN PAIVITYS ERILLISESSA SAIKEESSA
         // imageLabel.setIcon(new ImageIcon(url));
-        
+      
         static class KartanPaivitys implements Runnable{
             
-            KartanPaivitys(){
+            KartanPaivitys(xmin, xmax, ymin, ymax){
                 
             } // konstruktori
             
             @Override
             public void run(){
+            imageLabel.setIcon(new ImageIcon("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1\n" +
+                                             "&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326\n" +
+                                             "&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities\n" +
+                                             "&STYLES=&FORMAT=image/png&TRANSPARENT=true"));     
                 
             } // run
         } // KartanPaivitys
-      }
-     
     } // MapDialog

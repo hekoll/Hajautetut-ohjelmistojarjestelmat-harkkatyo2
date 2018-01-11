@@ -4,12 +4,13 @@
     // TEKIJAT: Pinja Palm, Helena Ollila ja Satu Jantunen
      
     import javax.swing.*;
+    import javax.swing.ImageIcon;
     import javax.swing.event.*;
     import java.awt.*;
     import java.awt.event.*;
     import java.net.*;
     
-    //Parsimis paketteja
+    // XML Parsimispaketteja: kaytettiin javax.xml.parsers
     import org.w3c.dom.Document;
     import org.xml.sax.SAXException;
     import org.w3c.dom.NodeList;
@@ -23,11 +24,12 @@
     import javax.xml.xpath.XPathFactory;
 
     import java.io.IOException;
+    import java.util.ArrayList;
      
     public class MapDialog extends JFrame {
      
-      // Kayttoliittyman komponentit
-      //Koordinaatit ja zoom/move muuttuja
+      // Koordinaatit ja zoom/move muuttuja
+        
       private int xmin;
       private int ymin;
       private int ymax;
@@ -35,6 +37,12 @@
       private final int zoom=20;
       private final int move=20;
      
+      // Lista, johon tallennetaan layerit
+      
+      private ArrayList<LayerCheckBox> layerLista = new ArrayList<>();
+      
+      // Kayttoliittyman komponentit
+      
       private JLabel imageLabel = new JLabel();
       private JPanel leftPanel = new JPanel();
      
@@ -51,9 +59,14 @@
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
      
-        // TESTIRIVI
+        // Haetaan alustava karttakuva
         imageLabel.setIcon(new ImageIcon(new URL("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,cities&STYLES=&FORMAT=image/png&TRANSPARENT=true")));
-     
+        // Koordinaattien alkuarvot
+        xmin=-180;
+        ymin=-90;
+        xmax=180;
+        ymax=90;
+        
         add(imageLabel, BorderLayout.EAST);
      
         ButtonListener bl = new ButtonListener();
@@ -72,23 +85,40 @@
         // TODO:
         // ALLA OLEVIEN KOLMEN TESTIRIVIN TILALLE SILMUKKA JOKA LISAA KAYTTOLIITTYMAAN
         // KAIKKIEN XML-DATASTA HAETTUJEN KERROSTEN VALINTALAATIKOT MALLIN MUKAAN
-        
-        //Parsimis koodia KESKEN!!! https://www.journaldev.com/1194/java-xpath-example-tutorial
-        DocumentBuilderFactory docMuodostus = DocumentBuilderFactory.newInstance();
-        DocumentBuilder muodostaja;
-        Dodument tieto = null;
+       
         try{
-        muodostaja = docMuodostus.newDocumentBuilder();
-        tieto = muodostaja.parse("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities");
-        XPathFactory =
-        } // try
-        for(){
-           
-        } // for
+            // Luodaan Document olio
+            DocumentBuilderFactory docMuodostus = DocumentBuilderFactory.newInstance();
+            DocumentBuilder muodostaja = docMuodostus.newDocumentBuilder();
+            Document tieto = muodostaja.parse("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities");
         
-        leftPanel.add(new LayerCheckBox("bluemarble", "Maapallo", true));
-        leftPanel.add(new LayerCheckBox("cities", "Kaupungit", false));
-     
+            // Parsimiseen tarvittavia olioita
+            XPathFactory xpathFactory = XPathFactory.newInstance();
+            XPath xpath = xpathFactory.newXPath();
+        
+            // Haetaan tiedot XML dodumentista
+            ArrayList<String> lista = new ArrayList<>();
+            XPathExpression expr = xpath.compile("/WMT_MS_Capabilities/Capability/Layer/Layer/Name/text()") ;
+            NodeList nodes = (NodeList) expr.evaluate( tieto , XPathConstants.NODESET);
+            
+            //Tallennetaan tiedot listaan
+            for(int i = 0; i<nodes.getLength(); i++){
+                lista.add(nodes.item(i).getNodeValue());
+            } // for
+            
+            //Kaydaan lista lapi ja luodaan valintalaatikot
+            for(int i = 0; i<lista.size(); i++){
+                String nimi = lista.get(i);
+                LayerCheckBox box = new LayerCheckBox(nimi,nimi,false);
+                layerLista.add(box);
+                leftPanel.add(box);
+            } // for            
+        } // try
+        
+        catch (ParserConfigurationException | SAXException | XPathExpressionException | IOException e){
+            e.printStackTrace();
+        } // catch
+        
         leftPanel.add(refreshB);
         leftPanel.add(Box.createVerticalStrut(20));
         leftPanel.add(leftB);
@@ -103,18 +133,18 @@
         pack();
         setVisible(true);
      
-      }
+      } // MapDialog
      
       public static void main(String[] args) throws Exception {
         new MapDialog();
-      }
+      } // main
      
       // Kontrollinappien kuuntelija
       // KAIKKIEN NAPPIEN YHTEYDESSA VOINEE HODYNTAA updateImage()-METODIA
       private class ButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e) {
           if(e.getSource() == refreshB) {
-            //try { updateImage(); } catch(Exception ex) { ex.printStackTrace(); }
+           
           }
           if(e.getSource() == leftB) {
             // TODO:
@@ -122,6 +152,7 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             xmin=xmin-move;
             xmax=xmax-move;
+            
           }
           if(e.getSource() == rightB) {
             // TODO:
@@ -129,6 +160,7 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             xmin=xmin+move;
             xmax=xmax+move;
+            
           }
           if(e.getSource() == upB) {
             // TODO:
@@ -136,6 +168,7 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             ymin=ymin+move;
             ymax=ymax+move;
+            
           }
           if(e.getSource() == downB) {
             // TODO:
@@ -143,6 +176,7 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             ymin=ymin-move;
             ymax=ymax-move;
+            
           }
           if(e.getSource() == zoomInB) {
             // TODO:
@@ -150,8 +184,9 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             xmin=xmin+zoom;
             xmax=xmax-zoom;
-            ymin=ymin+zoom;
-            ymax=ymax-zoom;
+            ymin=ymin+zoom/2;
+            ymax=ymax-zoom/2;
+            
           }
           if(e.getSource() == zoomOutB) {
             // TODO:
@@ -159,12 +194,14 @@
             // MUUTA KOORDINAATTEJA, HAE KARTTAKUVA PALVELIMELTA JA PAIVITA KUVA
             xmin=xmin-zoom;
             xmax=xmax+zoom;
-            ymin=ymin-zoom;
-            ymax=ymax+zoom;
+            ymin=ymin-zoom/2;
+            ymax=ymax+zoom/2;
             
           }
+          // Paivitetaan kuva
+          try { updateImage(); } catch(Exception ex) { ex.printStackTrace(); }
         }
-      }
+      } 
      
       // Valintalaatikko, joka muistaa karttakerroksen nimen
       private class LayerCheckBox extends JCheckBox {
@@ -178,7 +215,8 @@
      
       // Tarkastetaan mitka karttakerrokset on valittu,
       // tehdaan uudesta karttakuvasta pyynto palvelimelle ja paivitetaan kuva
-      public void updateImage() throws Exception {
+      
+      public void updateImage() throws Exception{
         String s = "";
      
         // Tutkitaan, mitka valintalaatikot on valittu, ja
@@ -190,26 +228,53 @@
               if(((LayerCheckBox)com).isSelected()) s = s + com.getName() + ",";
         }
         if (s.endsWith(",")) s = s.substring(0, s.length() - 1);
-     
-      }
-      
+        
+        // Kaynnistetaan saie, joka paivittaa kuvan
+        new KartanPaivitys(s).run();
+      } // updateImage
+        
         // TODO:
         // getMap-KYSELYN URL-OSOITTEEN MUODOSTAMINEN JA KUVAN PAIVITYS ERILLISESSA SAIKEESSA
-        // imageLabel.setIcon(new ImageIcon(url));
       
-        static class KartanPaivitys implements Runnable{
+        private class KartanPaivitys extends Thread{ 
+        
+            private String s;
             
-            KartanPaivitys(xmin, xmax, ymin, ymax){
-                
+            KartanPaivitys(String s){
+                this.s = s;
             } // konstruktori
             
             @Override
             public void run(){
-            imageLabel.setIcon(new ImageIcon("http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1\n" +
-                                             "&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326\n" +
-                                             "&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities\n" +
-                                             "&STYLES=&FORMAT=image/png&TRANSPARENT=true"));     
+                try{
+                    String x1 = String.valueOf(xmin);
+                    String x2 = String.valueOf(xmax);
+                    String y1 = String.valueOf(ymin); 
+                    String y2 = String.valueOf(ymax);
+                    String url = "";
+                    
+                    // Varmistetaan, ettei layer ikina tyhja, jos kayttaja ei valitse oletuksena bluemarble,cities
+                    if(s.isEmpty()){
+                    url = "http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=" + x1 + "," + y1 + "," + x2 + ","+ y2
+                                  + "&SRS=EPSG:4326" + "&WIDTH=953&HEIGHT=480&LAYERS=" + "bluemarble,cities" + "&STYLES=&FORMAT=image/png&TRANSPARENT=true";    
+                    }else{
+                    
+                    url = "http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=" + x1 + "," + y1 + "," + x2 + ","+ y2
+                                  + "&SRS=EPSG:4326" + "&WIDTH=953&HEIGHT=480&LAYERS=" + s + "&STYLES=&FORMAT=image/png&TRANSPARENT=true";
+                    }
+                    
+                    // Varmistetaan etta url oikein
+                    System.out.println(url);
+                    URL url1 = new URL(url);
+                    
+                    imageLabel.setIcon(new ImageIcon(url1));
+                    
+                } // try
                 
+                catch(Exception a){
+                    a.printStackTrace();
+                } // catch
             } // run
         } // KartanPaivitys
-    } // MapDialog
+    
+} // MapDialog

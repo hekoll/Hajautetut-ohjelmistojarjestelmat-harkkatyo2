@@ -14,14 +14,10 @@ reunakoordinaatit. getMap-kysely puolestaan hakee palvelimelta annettujen parame
 karttakuvan, joka on normaali kuvatiedosto, esim. PNG tai JPG.
 
 Seuraavassa on esimerkki getCapabilities-kyselystä:
-http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1
-&REQUEST=GetCapabilities
+http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetCapabilities
 
 Vastaavasti getMap-kyselyn muoto on seuraava:
-http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1
-&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326
-&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities
-&STYLES=&FORMAT=image/png&TRANSPARENT=true
+http://demo.mapserver.org/cgi-bin/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=-180,-90,180,90&SRS=EPSG:4326&WIDTH=953&HEIGHT=480&LAYERS=bluemarble,country_bounds,continents,cities&STYLES=&FORMAT=image/png&TRANSPARENT=true
 
 Tässä kyselyssä parametreina ovat palvelun ilmaiseva vakioparametri WMS, WMS-versio, kyselyn
 tyyppi, näytettävän alueen rajat (xmin, ymin, xmax, ymax), käytettävä koordinaatisto (tässä
